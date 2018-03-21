@@ -1,14 +1,25 @@
 'use strict';
 
+/**
+Append the selected text to the end of the URL and redirect to the new address.
+*/
 function appendSuffixToUrl(tabUrl, TabId, suffixToAdd) {
   var newUrl = tabUrl + suffixToAdd;
   chrome.tabs.update(TabId, {url: newUrl});
 }
 
+/**
+Verify that the URL and the selected text are strings
+*/
 function checkUrlAndSelectedTextAreValid(item) {
     console.assert(typeof item == 'string', 'url/selected text should be a string');
 }
 
+/**
+Run verifications on the selected text and the URL.
+Add '/' in case it is missing and will cause to invalid address, 
+or remove '/' in case of duplication. 
+*/
 function checkSelectetTextValid(tabUrl, selectedText) {
     [tabUrl, selectedText].forEach(checkUrlAndSelectedTextAreValid);
     if(!selectedText.startsWith('/') && !tabUrl.endsWith('/')) {
@@ -19,7 +30,9 @@ function checkSelectetTextValid(tabUrl, selectedText) {
     return selectedText;
 }
 
-
+/**
+Redirect to the new address that composed from the URL and the selected text
+*/
 function redirectUrlToPasteSuffixContent(selectedText) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         selectedText = checkSelectetTextValid(tabs[0].url, selectedText);
@@ -27,6 +40,10 @@ function redirectUrlToPasteSuffixContent(selectedText) {
     });
 }
 
+/**
+Send message to the content script to fetch the marked text and redirect to
+the new address
+*/
 function sendCopySelectedTextMessage() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var message = 'get_selected_text';
