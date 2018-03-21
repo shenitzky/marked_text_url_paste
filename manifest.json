@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+
+  "name": "marked text url paste",
+  "description": "This extension allows the user to redirect to a new page with address composed from the current url and the marked text",
+  "version": "1.0",
+  "commands": {
+    "add-marked-text-to-url": {
+      "suggested_key": {
+        "default": "Alt+C"
+      },
+      "description": "Trigger add marked text to URL feature"
+    }
+  },  
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": [
+      "content.js"
+    ]
+  }],
+  "background": {
+        "persistent": false,
+        "page": "background.html"
+  },
+  "browser_action": {
+    "default_icon": "url.png",
+    "default_popup": "popup.html"
+  },
+"permissions": ["tabs", "activeTab", "<all_urls>", "contextMenus"]
+}
