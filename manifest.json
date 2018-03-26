@@ -24,7 +24,7 @@
   },
   "browser_action": {
     "default_icon": "url.png",
-    "default_popup": "popup.html"
+    "default_popup": "background.html"
   },
 "permissions": ["tabs", "activeTab", "<all_urls>", "contextMenus"]
 }

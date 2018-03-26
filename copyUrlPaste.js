@@ -44,13 +44,19 @@ function redirectUrlToPasteSuffixContent(selectedText) {
 Send message to the content script to fetch the marked text and redirect to
 the new address
 */
-function sendCopySelectedTextMessage() {
+function sendCopySelectedTextMessage(callback) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var message = 'get_selected_text';
         chrome.tabs.sendMessage(tabs[0].id, {data: message}, function(data) {
-            redirectUrlToPasteSuffixContent(data.selectedText);
+            callback(data.selectedText);
         });
     });
 }
 
-chrome.commands.onCommand.addListener(sendCopySelectedTextMessage);
+function commandSelector(command) {
+    if (command == "add-marked-text-to-url") {
+        sendCopySelectedTextMessage(redirectUrlToPasteSuffixContent);
+    }
+}
+
+chrome.commands.onCommand.addListener(commandSelector);
